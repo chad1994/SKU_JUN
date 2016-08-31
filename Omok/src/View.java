@@ -1,4 +1,3 @@
-import java.awt.Container;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -12,6 +11,7 @@ public class View {
 		// Container contentPane = frame.getContentPane();
 		
 		frame.contentPane.add(intro);
+		intro.bgmplay();
 		// contentPane.add(board);
 		frame.setPreferredSize(new Dimension(900, 900));// 프레임크기 지정
 		frame.setLocation(500, 20);// 프레임 실행 위치 설정

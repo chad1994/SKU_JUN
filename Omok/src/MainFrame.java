@@ -1,23 +1,19 @@
 import java.awt.Container;
-import java.awt.Dimension;
 import java.io.File;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 //	Board board=null;
 //	Intro intro=null;
 	Container contentPane=this.getContentPane();
-	MainFrame frame;
 
 	
 	public MainFrame(){
-		setTitle("5MOK");
+		setTitle("5MOK_by_Sku_Junyeong");
 	}
 	
 //	public void changepanel(String panelname){
@@ -35,7 +31,6 @@ public class MainFrame extends JFrame {
 		try {
 			AudioInputStream ais = AudioSystem.getAudioInputStream(new File("win.wav"));
 			Clip clip = AudioSystem.getClip();
-			clip.stop();
 			clip.open(ais);
 			clip.start();
 		} catch (Exception e) {
@@ -43,8 +38,4 @@ public class MainFrame extends JFrame {
 		}
 	}
 	//---------------------------------------------------------------------
-	public void endgame(String message){
-		JOptionPane.showMessageDialog(this,message,"5¸ñ! ½Â¸®!",JOptionPane.PLAIN_MESSAGE);
-//		System.exit(0);
-	}
 }

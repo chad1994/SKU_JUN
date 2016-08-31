@@ -7,13 +7,14 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 
 public class Board extends JPanel {
 
+	JButton surrenderbt;
 	// ******************바둑판 시작좌표 및 바둑판 간격
 	final int X_START = 75;
 	final int Y_START = 75;
@@ -24,13 +25,14 @@ public class Board extends JPanel {
 	ImageIcon backimage;
 	ImageIcon black, white;
 	ImageIcon player;
+	ImageIcon reverse,item,surrender;
 
 	// **********************************보드판그리기
 	public void paintComponent(Graphics g) {
-		System.out.println("보드그리기");
+		System.out.println("그리기");
 		int x = 0, y = 0;
 		// ********************************배경이미지 그리기
-		g.drawImage(backimage.getImage(), 0, 0, 900, 900, null);
+		g.drawImage(backimage.getImage(), 0, 0, 900, 1000, null);
 		for (y = 100; y <= 800; y += 50)
 			g.drawLine(100, y, 800, y);
 		for (x = 100; x <= 800; x += 50)
@@ -88,14 +90,18 @@ public class Board extends JPanel {
 			}
 		}
 		setOpaque(false);
+		
+		g.drawImage(surrender.getImage(), 100, 830, 200, 76, null);
+		g.drawImage(reverse.getImage(), 350, 830, 200, 76, null);
+		g.drawImage(item.getImage(), 600, 830, 200, 76, null);
 	}
 
 	public void makecomponent() {
-		JLabel label = new JLabel("player.png");
-		// label.setText("player");
-		label.setLocation(100, 100);
-		label.setSize(100, 100);
-		this.add(label);
+//		JLabel label = new JLabel("player.png");
+//		// label.setText("player");
+//		label.setLocation(100, 100);
+//		label.setSize(100, 100);
+//		this.add(label);
 
 		// JButton button = new JButton("player.png");
 		// button.setLocation(500, 500);
@@ -114,15 +120,19 @@ public class Board extends JPanel {
 			System.out.println("에러");
 		}
 	}
+	//-------------------------------------------------------------------------
 
 	public Board(Model model) {
 		setLayout(null);
-		this.makecomponent();
+//		this.makecomponent();
 		this.model = model;
-		backimage = new ImageIcon("바둑판.png");
-		black = new ImageIcon("흑돌.png");
-		white = new ImageIcon("백돌.png");
+		backimage = new ImageIcon("boardBackground.png");
+		black = new ImageIcon("blackstone.png");
+		white = new ImageIcon("whitestone.png");
 		player = new ImageIcon("player.png");
-
+		surrender = new ImageIcon("surrender.png");
+		reverse = new ImageIcon("reverse.png");
+		item = new ImageIcon("item.png");
+		
 	}
 }

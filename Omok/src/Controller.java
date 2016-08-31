@@ -1,28 +1,41 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.TimerTask;
+
+import javax.swing.JOptionPane;
 
 public class Controller implements MouseListener{
 	Model model;
 	Board board;
 	MainFrame frame;
-
-	public Controller(Model model, Board board, MainFrame frame) {
+	Intro intro;
+	int b_reverseCount=1;
+	int w_reverseCount=1;
+	int b_itemCount=1;
+	int w_itemCount=1;
+	int limit=10;
+//****************************************************************************************8
+	public Controller(Model model, Board board, MainFrame frame,Intro intro) {
 		this.model = model;
 		this.board = board;
 		this.frame = frame;
+		this.intro = intro;
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
+	public void mouseClicked(MouseEvent e) {
+		
 		// *********************************************클릭시 _바둑판 임계범위에 따른 배열값 입력
+		int X=e.getX();
+		int Y=e.getY();
 		final int d = 50;
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
-				if (((arg0.getX() > model.X_START + (d * i)) && (arg0.getX() < model.X_START + (d * (i + 1))))
-						&& ((arg0.getY() > model.Y_START + (d * j)) && (arg0.getY() < model.Y_START + (d * (j + 1))))) {
+				if ((( X > model.X_START + (d * i)) && ( X < model.X_START + (d * (i + 1))))
+						&& ((Y > model.Y_START + (d * j)) && (Y < model.Y_START + (d * (j + 1))))) {
 
 					if (model.Counter % 2 == 0) {// 흰돌차례
-						if (model.getArr(i, j) != 1) {
+						if (model.getArr(i, j) == 0) {
 							model.setArr(model.WHITE, i, j);
 							++model.Counter;
 							model.setWhite_x(i); // 흰돌의 x좌표 받기
@@ -34,12 +47,13 @@ public class Controller implements MouseListener{
 									|| model.white_leftdiagcheck(i, j) == true
 									|| model.white_rightdiagcheck(i, j) == true)) {
 								frame.play();
-								frame.endgame("백돌 승리!!");
+								this.endgame("백돌 승리!!");
+								frame.setSize(900, 900);
 							}
 
 						}
 					} else {
-						if (model.getArr(i, j) != 2) {// 검은돌 차례
+						if (model.getArr(i, j) ==0) {// 검은돌 차례
 							model.setArr(model.BLACK, i, j);
 							++model.Counter;
 							model.setBlack_x(i); // 검은돌의 x좌표 받기
@@ -51,12 +65,9 @@ public class Controller implements MouseListener{
 									|| model.black_leftdiagcheck(i, j) == true
 									|| model.black_rightdiagcheck(i, j) == true)) {
 								frame.play();
-								frame.endgame("흑돌 승리!!");
+								this.endgame("흑돌 승리!!");
+								frame.setSize(900, 900);
 							}
-							// if(model.triple_widthcheck(i,
-							// j)==true&&model.triple_lengthcheck(i, j)==true){
-							// System.out.println("삼삼반칙!");
-							// }
 						}
 					}
 				}
@@ -67,6 +78,38 @@ public class Controller implements MouseListener{
 		 * for (int a = 0; a < 15; a++) { for (int b = 0; b < 15; b++) {
 		 * System.out.print(model.getArr(a, b)); } System.out.println(); }
 		 */
+		//----------------------------------------------------항복하기 기능
+		if((X > 100 && X<300)&&(Y >830&&Y<906)){
+			intro.clickplay();
+			System.out.println("112");
+			int result = JOptionPane.showConfirmDialog(frame, "정말 이대로 항복 하실겁니까?","항복!",JOptionPane.YES_NO_OPTION);
+			if( result==JOptionPane.YES_OPTION){
+				if(model.Counter%2==1){
+					frame.play();
+					endgame("백돌 승리!!");
+					frame.setSize(900, 900);
+				}
+				else{
+					frame.play();
+					endgame("흑돌승리!!");
+					frame.setSize(900, 900);
+				}
+			}
+		}
+		//-------------------------------------------------한수 무르기 기능
+		if((X > 350 && X<550)&&(Y >830&&Y<906)){
+			intro.clickplay();
+		reverseturn();
+		}
+		System.out.println(model.getBlack_x() +""+ model.getBlack_y());
+		System.out.println(model.getWhite_x() +""+ model.getWhite_y());
+		//-------------------------------------------------타이머 아이템 기능
+		if((X > 600 && X<800)&&(Y >830&&Y<906)){
+			intro.clickplay();
+			
+		}
+		
+		
 	}
 
 	@Override
@@ -78,7 +121,6 @@ public class Controller implements MouseListener{
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -92,12 +134,48 @@ public class Controller implements MouseListener{
 
 	}
 
-//	@Override
-//	public void actionPerformed(ActionEvent e) {
-//		if (e.getSource() == intro.getButton1()) {
-//			frame.changepanel("board");
-//		}
-//
-//	}
+	//--------------------------------------------------게임끝내기메세지.
+	public void endgame(String message){
+		JOptionPane.showMessageDialog(frame,message,"5목! 승리!",JOptionPane.PLAIN_MESSAGE);
+		frame.contentPane.remove(board);
+		frame.contentPane.add(intro);
+		frame.contentPane.repaint();
+	}
+	//----------------------------------------------------------------한수무르기(메소드)
+	public void reverseturn(){
+		if(model.Counter%2==0){
+			if(b_reverseCount!=0){
+				model.setArr(0, model.getBlack_x(), model.getBlack_y());
+				board.repaint();
+				model.Counter--;
+				b_reverseCount--;
+			}
+		}
+		else 
+			if(model.Counter%2!=0){
+			if(w_reverseCount!=0){
+				model.setArr(0, model.getWhite_x(), model.getWhite_y());
+				board.repaint();
+				model.Counter--;
+				w_reverseCount--;
+			}
+		}
+	}
+//	//-----------------------------------------------------------------
+	class Timer extends Thread{
 
+	public void run() {
+		Timer timer = new Timer();
+		timer.start();
+		try {
+			timer.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+		
+	}
+	
 }
+

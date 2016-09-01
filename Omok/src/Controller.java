@@ -9,11 +9,7 @@ public class Controller implements MouseListener{
 	Board board;
 	MainFrame frame;
 	Intro intro;
-	int b_reverseCount=1;
-	int w_reverseCount=1;
-	int b_itemCount=1;
-	int w_itemCount=1;
-	int limit=10;
+
 //****************************************************************************************8
 	public Controller(Model model, Board board, MainFrame frame,Intro intro) {
 		this.model = model;
@@ -36,6 +32,17 @@ public class Controller implements MouseListener{
 
 					if (model.Counter % 2 == 0) {// 흰돌차례
 						if (model.getArr(i, j) == 0) {
+							if(model.w_itemCount==1){
+								model.state=true;
+								model.w_itemCount--;
+								Timethread t = new Timethread(model,board,frame);
+								t.start();
+							}
+							System.out.println("화이트 카운트"+model.w_itemCount);
+							if(model.b_itemCount==0){
+								model.state=false;
+								model.b_itemCount--;
+							}
 							model.setArr(model.WHITE, i, j);
 							++model.Counter;
 							model.setWhite_x(i); // 흰돌의 x좌표 받기
@@ -54,6 +61,16 @@ public class Controller implements MouseListener{
 						}
 					} else {
 						if (model.getArr(i, j) ==0) {// 검은돌 차례
+							if(model.b_itemCount==1){
+								model.b_itemCount--;
+								Timethread t = new Timethread(model,board,frame);
+								model.state=true;
+								t.start();
+							}
+							if(model.w_itemCount==0){
+								model.state=false;
+								model.w_itemCount--;
+							}
 							model.setArr(model.BLACK, i, j);
 							++model.Counter;
 							model.setBlack_x(i); // 검은돌의 x좌표 받기
@@ -105,11 +122,20 @@ public class Controller implements MouseListener{
 		System.out.println(model.getWhite_x() +""+ model.getWhite_y());
 		//-------------------------------------------------타이머 아이템 기능
 		if((X > 600 && X<800)&&(Y >830&&Y<906)){
+			board.repaint();
 			intro.clickplay();
-			
-		}
-		
-		
+			if(model.Counter%2!=0){//검정
+				if(model.b_itemCount==2){
+					model.b_itemCount--;
+				}
+			}
+			else if(model.Counter%2==0){//흰
+				if(model.w_itemCount==2){
+					model.w_itemCount--;
+					System.out.println("흰돌카운트"+model.w_itemCount);
+				}
+			}
+		}	
 	}
 
 	@Override
@@ -144,38 +170,24 @@ public class Controller implements MouseListener{
 	//----------------------------------------------------------------한수무르기(메소드)
 	public void reverseturn(){
 		if(model.Counter%2==0){
-			if(b_reverseCount!=0){
+			if(model.b_reverseCount!=0){
 				model.setArr(0, model.getBlack_x(), model.getBlack_y());
 				board.repaint();
 				model.Counter--;
-				b_reverseCount--;
+				model.b_reverseCount--;
 			}
 		}
 		else 
 			if(model.Counter%2!=0){
-			if(w_reverseCount!=0){
+			if(model.w_reverseCount!=0){
 				model.setArr(0, model.getWhite_x(), model.getWhite_y());
 				board.repaint();
 				model.Counter--;
-				w_reverseCount--;
+				model.w_reverseCount--;
 			}
 		}
 	}
 //	//-----------------------------------------------------------------
-	class Timer extends Thread{
-
-	public void run() {
-		Timer timer = new Timer();
-		timer.start();
-		try {
-			timer.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-		
-	}
 	
 }
 

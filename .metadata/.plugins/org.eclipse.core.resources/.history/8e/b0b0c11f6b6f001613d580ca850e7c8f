@@ -1,0 +1,58 @@
+
+public class Timethread extends Thread implements Runnable {
+	Model model;
+	Board board;
+	MainFrame frame;
+
+	@Override
+	public void run() {
+		super.run();
+		while (model.state) {
+			try {
+					if(model.Counter%2==0){
+						System.out.println(model.b_timecount);
+						model.b_timecount--;
+					}
+					else if(model.Counter%2!=0){
+						System.out.println(model.w_timecount);
+						model.w_timecount--;
+					}
+					if(model.w_timecount==0){
+						model.Counter++;
+						model.state=false;
+						model.w_itemCount--;
+						System.out.println("아이템"+model.w_itemCount);
+					}
+					else if(model.b_timecount==0){
+						model.Counter++;
+						model.state=false;
+						model.b_itemCount--;
+					}
+					
+					board.repaint();
+					sleep(1000);
+//					if(savecounter+2==model.Counter){ //15초 안에 돌을 놨을 경우 조건
+//						else if(model.Counter%2==0)
+//							model.w_itemCount--;
+//						model.state = false;
+//					}
+//					else if (model.timecount == 0) {
+//						++model.Counter;
+//						board.repaint();
+//						model.state = false;
+//					}
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	Timethread(Model model, Board board,MainFrame frame) {
+		this.model = model;
+		this.board = board;
+		this.frame = frame;
+	}
+
+}

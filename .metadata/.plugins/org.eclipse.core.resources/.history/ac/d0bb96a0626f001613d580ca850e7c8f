@@ -1,0 +1,42 @@
+
+public class Timethread extends Thread implements Runnable {
+	Model model;
+	Board board;
+	MainFrame frame;
+
+	@Override
+	public void run() {
+		super.run();
+		final int savecounter = model.Counter;
+		while (model.state) {
+			try {
+				board.repaint();
+				if(model.Counter>savecounter){
+					model.timecount--;
+					board.repaint();
+					sleep(1000);
+					if(savecounter+2==model.Counter){
+						if(model.Counter%2!=0)
+							model.b_itemCount--;
+						model.state = false;
+					}
+					else if (model.timecount == 0) {
+						++model.Counter;
+						board.repaint();
+						model.state = false;
+					}
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	Timethread(Model model, Board board,MainFrame frame) {
+		this.model = model;
+		this.board = board;
+		this.frame = frame;
+	}
+
+}

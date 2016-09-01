@@ -22,10 +22,12 @@ public class Board extends JPanel {
 
 	Graphics g;
 	Model model;
+	Timethread timethread;
 	ImageIcon backimage;
 	ImageIcon black, white;
 	ImageIcon player;
 	ImageIcon reverse,item,surrender;
+	ImageIcon hansu,fifteensecond;
 
 	// **********************************보드판그리기
 	public void paintComponent(Graphics g) {
@@ -71,7 +73,7 @@ public class Board extends JPanel {
 		g.setColor(Color.black);
 		g.setFont(new Font("굴림", Font.BOLD, 25));
 		g.drawString("Player2", 750, 60);
-		// ---------------------------------------
+		// ---------------------------------------현재 턴알려주기
 		if (model.Counter % 2 == 0) {
 			g.drawImage(white.getImage(), 350, 20, 50, 50, null);
 			g.drawString("백돌 차례입니다.", 400, 50);
@@ -79,7 +81,7 @@ public class Board extends JPanel {
 			g.drawImage(black.getImage(), 350, 20, 50, 50, null);
 			g.drawString("흑돌 차례입니다.", 400, 50);
 		}
-		// -----------------------------------------
+		// -----------------------------------------최근 놓은 바둑돌 위치찍어주기
 		if (model.Counter != 1) {
 			if (model.Counter % 2 != 0) {
 				g.setColor(Color.red);
@@ -89,11 +91,28 @@ public class Board extends JPanel {
 				g.fillOval(((model.getBlack_x() + 2) * 50) - 5, ((model.getBlack_y() + 2) * 50) - 5, 10, 10);
 			}
 		}
-		setOpaque(false);
-		
+		//-----------------------------------------------아이템인터페이스
 		g.drawImage(surrender.getImage(), 100, 830, 200, 76, null);
 		g.drawImage(reverse.getImage(), 350, 830, 200, 76, null);
 		g.drawImage(item.getImage(), 600, 830, 200, 76, null);
+		//-----------------------------------------------
+		if(model.b_reverseCount==1)
+			g.drawImage(hansu.getImage(), 20, 100, 50, 50, null);
+		if(model.b_itemCount==2)
+			g.drawImage(fifteensecond.getImage(), 20, 160, 50, 50, null);
+		if(model.w_reverseCount==1)
+			g.drawImage(hansu.getImage(), 820, 100, 50, 50, null);
+		if(model.w_itemCount==2)
+			g.drawImage(fifteensecond.getImage(), 820, 160, 50, 50, null);
+		if(model.b_itemCount==0&&model.Counter%2==0){
+			g.drawString("남은 시간:"+model.b_timecount, 400, 90);
+		}
+		if(model.w_itemCount==0&&model.Counter%2!=0){
+			g.drawString("남은 시간:"+model.w_timecount, 400, 90);
+		}
+		
+		
+		setOpaque(false);
 	}
 
 	public void makecomponent() {
@@ -122,10 +141,11 @@ public class Board extends JPanel {
 	}
 	//-------------------------------------------------------------------------
 
-	public Board(Model model) {
+	public Board(Model model,Timethread timethread) {
 		setLayout(null);
 //		this.makecomponent();
 		this.model = model;
+		this.timethread = timethread;
 		backimage = new ImageIcon("boardBackground.png");
 		black = new ImageIcon("blackstone.png");
 		white = new ImageIcon("whitestone.png");
@@ -133,6 +153,8 @@ public class Board extends JPanel {
 		surrender = new ImageIcon("surrender.png");
 		reverse = new ImageIcon("reverse.png");
 		item = new ImageIcon("item.png");
+		hansu = new ImageIcon("hansu.png");
+		fifteensecond = new ImageIcon("fifteensecond.png");
 		
 	}
 }

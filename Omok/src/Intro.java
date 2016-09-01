@@ -15,6 +15,7 @@ public class Intro extends JPanel {
 	MainFrame frame;
 	JButton button1,button2,button3;
 	JPanel buttonpanel;
+	Timethread timethread;
 //----------------------------------------------------------------------------페인트
 	public void paintComponent(Graphics g){
 		g.drawImage(back.getImage(), 0, 0, 900, 900, null);
@@ -30,6 +31,7 @@ public class Intro extends JPanel {
 			Clip clip = AudioSystem.getClip();
 			clip.open(ais);
 			clip.start();
+			clip.loop(-1);
 		} catch (Exception e) {
 			System.out.println("에러");
 		}
@@ -111,7 +113,7 @@ public class Intro extends JPanel {
 //		buttonpanel.setVisible(true);
 //		setVisible(true);
 		
-		IntroController introController = new IntroController(this, button1,button2,button3,frame);
+		IntroController introController = new IntroController(this, button1,button2,button3,frame,timethread);
 		this.button1.addActionListener(introController);
 		this.button2.addActionListener(introController);
 		this.button3.addActionListener(introController);

@@ -14,7 +14,7 @@ public class GuideController implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if((e.getX()>550&&e.getX()<750)&&(e.getY()>550&&e.getY()<650)){
+		if((e.getX()>600&&e.getX()<750)&&(e.getY()>600&&e.getY()<670)){
 			frame.contentPane.remove(guide);
 			frame.contentPane.add(intro);
 			frame.setSize(900, 900);

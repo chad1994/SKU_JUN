@@ -36,7 +36,7 @@ public class IntroController implements ActionListener {
 			frame.contentPane.remove(intro);
 			frame.contentPane.add(guide);
 			guide.addMouseListener(new GuideController(guide,frame,intro));
-			frame.setSize(841,751);
+			frame.setSize(875,735);
 			frame.setVisible(true);
 			intro.clickplay();
 		}

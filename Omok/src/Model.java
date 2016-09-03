@@ -62,8 +62,8 @@ public class Model {
 	int w_reverseCount=1;
 	int b_itemCount=2;
 	int w_itemCount=2;
-	int w_timecount=15;
-	int b_timecount=15;
+	int w_timecount=10;
+	int b_timecount=10;
 	boolean state=true;
 	
 	

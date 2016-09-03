@@ -1,6 +1,5 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.TimerTask;
 
 import javax.swing.JOptionPane;
 
@@ -32,24 +31,23 @@ public class Controller implements MouseListener{
 
 					if (model.Counter % 2 == 0) {// 흰돌차례
 						if (model.getArr(i, j) == 0) {
-							if(model.w_itemCount==1){
-								model.state=true;
-								model.w_itemCount--;
-								Timethread t = new Timethread(model,board,frame);
-								t.start();
-							}
-							System.out.println("화이트 카운트"+model.w_itemCount);
 							if(model.b_itemCount==0){
 								model.state=false;
 								model.b_itemCount--;
 							}
-							model.setArr(model.WHITE, i, j);
-							++model.Counter;
+							if(model.w_itemCount==1){
+								model.w_itemCount--;
+								Timethread t = new Timethread(model,board,frame);
+								model.state=true;
+								t.start();
+							}
+							model.setArr(model.WHITE, i, j);//모델 맵배열에 1값 입력.
+							++model.Counter;//턴넘기기(카운트+)
+							System.out.println("카운트"+model.Counter);
 							model.setWhite_x(i); // 흰돌의 x좌표 받기
 							model.setWhite_y(j); // 흰돌의 y좌표 받기
-							// System.out.println(model.getWhite_x()+","+model.getWhite_y());
 							board.repaint();
-							board.play();
+							board.stonesound();
 							if ((model.white_heightcheck(i, j) == true || model.white_widthcheck(i, j) == true
 									|| model.white_leftdiagcheck(i, j) == true
 									|| model.white_rightdiagcheck(i, j) == true)) {
@@ -59,25 +57,26 @@ public class Controller implements MouseListener{
 							}
 
 						}
-					} else {
-						if (model.getArr(i, j) ==0) {// 검은돌 차례
+					} else { // 검은돌 차례
+						if (model.getArr(i, j) ==0) {
+							if(model.w_itemCount==0){
+								model.state=false;
+								model.w_itemCount--;
+							}
 							if(model.b_itemCount==1){
 								model.b_itemCount--;
 								Timethread t = new Timethread(model,board,frame);
 								model.state=true;
 								t.start();
 							}
-							if(model.w_itemCount==0){
-								model.state=false;
-								model.w_itemCount--;
-							}
 							model.setArr(model.BLACK, i, j);
 							++model.Counter;
+							System.out.println("카운트"+model.Counter);
 							model.setBlack_x(i); // 검은돌의 x좌표 받기
 							model.setBlack_y(j); // 검은돌의 y좌표 받기
 							// System.out.println(model.getBlack_x()+","+model.getBlack_y());
 							board.repaint();
-							board.play();
+							board.stonesound();
 							if ((model.black_heightcheck(i, j) == true || model.black_widthcheck(i, j) == true
 									|| model.black_leftdiagcheck(i, j) == true
 									|| model.black_rightdiagcheck(i, j) == true)) {
@@ -118,8 +117,6 @@ public class Controller implements MouseListener{
 			intro.clickplay();
 		reverseturn();
 		}
-		System.out.println(model.getBlack_x() +""+ model.getBlack_y());
-		System.out.println(model.getWhite_x() +""+ model.getWhite_y());
 		//-------------------------------------------------타이머 아이템 기능
 		if((X > 600 && X<800)&&(Y >830&&Y<906)){
 			board.repaint();
@@ -132,7 +129,6 @@ public class Controller implements MouseListener{
 			else if(model.Counter%2==0){//흰
 				if(model.w_itemCount==2){
 					model.w_itemCount--;
-					System.out.println("흰돌카운트"+model.w_itemCount);
 				}
 			}
 		}	

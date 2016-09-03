@@ -9,8 +9,8 @@ public class Guide extends JPanel {
 	ImageIcon exit;
 	MainFrame frame;
 	public void paintComponent(Graphics g){
-		g.drawImage(back.getImage(), 0, 0, 841, 751, null);
-		g.drawImage(exit.getImage(), 550, 550, 200, 100, null);
+		g.drawImage(back.getImage(), 0, 0, 875, 735, null);
+		g.drawImage(exit.getImage(), 600, 600, 150, 70, null);
 	}
 	
 	public Guide(){
